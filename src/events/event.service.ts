@@ -1,30 +1,13 @@
 import { Injectable } from "@nestjs/common";
+import { ADDRESS } from "src/constants/constants";
+import { ClientService } from "src/services/client.service";
 import {
-  createPublicClient,
-  http,
   parseAbiItem,
-  Address,
-  PublicClient,
 } from "viem";
-import { mainnet } from "viem/chains";
 
 @Injectable()
-export class EventsService {
-  constructor() {
-    this._initClient();
-  }
-
-  private _client: PublicClient;
-  private readonly ADDRESS: Address =
-    "0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2"; // AAVE address pool v3
-
-  private async _initClient() {
-    // @ts-ignore
-    this._client = createPublicClient({
-      chain: mainnet,
-      transport: http(),
-    }) as PublicClient;
-  }
+export class EventService {
+  constructor(private readonly _clientService: ClientService) {}
 
   async getSupply(): Promise<any[]> {
     const event = parseAbiItem(
@@ -54,12 +37,12 @@ export class EventsService {
     return await this._getLogs(event);
   }
 
-  private async _getLogs(event: any): Promise<any[]>{
+  private async _getLogs(event: any, nbrOfBlock = 100n): Promise<any[]> {
     const blockNumber = await this._getLastBlock();
-    const logs = await this._client.getLogs({
+    const logs = await this._clientService.client.getLogs({
       event,
-      address: this.ADDRESS,
-      fromBlock: blockNumber - 100n,
+      address: ADDRESS,
+      fromBlock: blockNumber - nbrOfBlock,
       toBlock: blockNumber,
     });
 
@@ -67,6 +50,6 @@ export class EventsService {
   }
 
   private async _getLastBlock(): Promise<bigint> {
-    return await this._client.getBlockNumber();
+    return await this._clientService.client.getBlockNumber();
   }
 }

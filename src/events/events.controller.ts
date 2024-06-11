@@ -1,9 +1,9 @@
 import { Controller, Get } from "@nestjs/common";
-import { EventsService } from "./events.service";
+import { EventService } from "./event.service";
 
 @Controller("events")
 export class EventsController {
-  constructor(private readonly _eventService: EventsService) {}
+  constructor(private readonly _eventService: EventService) {}
 
   @Get("/supply")
   async getSupply(): Promise<any[]> {
