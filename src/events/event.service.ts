@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { ADDRESS } from "src/constants/constants";
+import { POOL_ADDRESS } from "src/constants/constants";
 import { ClientService } from "src/services/client.service";
 import {
   parseAbiItem,
@@ -41,7 +41,7 @@ export class EventService {
     const blockNumber = await this._getLastBlock();
     const logs = await this._clientService.client.getLogs({
       event,
-      address: ADDRESS,
+      address: POOL_ADDRESS,
       fromBlock: blockNumber - nbrOfBlock,
       toBlock: blockNumber,
     });

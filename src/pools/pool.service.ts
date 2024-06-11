@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { ClientService } from "src/services/client.service";
 import { Address } from "viem";
 import { aavePoolV3 } from "../abi/aavePoolV3";
-import { ADDRESS } from "src/constants/constants";
+import { POOL_ADDRESS } from "src/constants/constants";
 
 interface IApyData {
   supplyApy: number;
@@ -16,7 +16,7 @@ export class PoolService {
 
   async getReserveData(address: Address): Promise<IApyData> {
     const reservesData = await this._clientService.client.readContract({
-      address: ADDRESS,
+      address: POOL_ADDRESS,
       abi: aavePoolV3,
       functionName: "getReserveData",
       args: [address],
